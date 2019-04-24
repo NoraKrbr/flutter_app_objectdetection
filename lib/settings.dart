@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const RES_LOW = 0;
+const RES_MED = 1;
+const RES_HIGH = 2;
 
 class Settings extends StatefulWidget {
   @override
-  _SettingsState createState() => new _SettingsState();
+  _SettingsState createState() => _SettingsState();
 }
 
 class _SettingsState extends State {
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: Text ('Settings'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings'),
       ),
-      body: new Container(
-          padding: new EdgeInsets.all(32.0),
+      body: Container(
+          padding: EdgeInsets.all(32.0),
           child: Column(
             children: <Widget>[
               Padding(
@@ -32,20 +37,22 @@ class _SettingsState extends State {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  new RaisedButton(
+                  RaisedButton(
                     padding: const EdgeInsets.all(8.0),
-                    onPressed: _setResolution(0),
-                    child: new Text('Low'),
+                    disabledColor: Colors.red,
+                    color: Colors.green,
+                    onPressed: () => _setResolution(RES_LOW),
+                    child: const Text('Low'),
                   ),
-                  new RaisedButton(
+                  RaisedButton(
                     padding: const EdgeInsets.all(8.0),
-                    onPressed: _setResolution(1),
-                    child: Text('Medium'),
+                    onPressed: () => _setResolution(RES_MED),
+                    child: const Text('Medium'),
                   ),
-                  new RaisedButton(
+                  RaisedButton(
                     padding: const EdgeInsets.all(8.0),
-                    onPressed: _setResolution(2),
-                    child: Text('High'),
+                    onPressed: () => _setResolution(RES_HIGH),
+                    child: const Text('High'),
                   ),
                 ],
               ),
@@ -55,4 +62,8 @@ class _SettingsState extends State {
   }
 }
 
-_setResolution(int x) {}
+Future<void> _setResolution(int x) async {
+  print('Button pressed! $x');
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('resolution', x);
+}

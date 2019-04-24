@@ -7,8 +7,8 @@ import 'camera.dart';
 import 'bounding_box.dart';
 
 class CameraStream extends StatefulWidget {
-
   final List<CameraDescription> cameras;
+
   CameraStream(this.cameras);
 
   @override
@@ -19,11 +19,6 @@ class _CameraStreamState extends State<CameraStream> {
   List<dynamic> _recognitions;
   int _imageHeight = 0;
   int _imageWidth = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   loadModel() async {
     String res = await Tflite.loadModel(
