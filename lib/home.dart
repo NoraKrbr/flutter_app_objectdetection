@@ -1,7 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:testapp/camera_stream.dart';
 import 'package:testapp/placeholder.dart';
+import 'package:testapp/app_state.dart';
 
 class Home extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -28,7 +30,7 @@ class _HomeState extends State<Home> {
         ];
 
   // TODO: implement bluetooth state
-  bool _bluetoothConnected = false;
+  // bool _bluetoothConnected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +43,17 @@ class _HomeState extends State<Home> {
             Navigator.of(context).pushNamed('/settings');
           },
         ),
-        IconButton(
-          icon: Icon(Icons.bluetooth),
-          color: _bluetoothConnected ? Colors.blue : Colors.white,
-          onPressed: () {
-            Navigator.of(context).pushNamed('/bluetooth');
-          },
+        ScopedModelDescendant<AppState>(
+          builder: (context, child, appState) => IconButton(
+            icon: Icon(Icons.bluetooth),
+            color: appState.bluetoothConnected ? Colors.blue : Colors.white,
+            onPressed: () {
+              print("TEST? "+appState.test);
+              Navigator.of(context).pushNamed('/bluetooth');
+            },
+          ),
         ),
+
       ]),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

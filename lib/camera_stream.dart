@@ -68,7 +68,6 @@ class _CameraStreamState extends State<CameraStream> {
   }
 
   List<dynamic> getRecognitions() {
-    return _recognitions == null ? [] :
-      _detectModeOn ? _recognitions : [];
+    return _recognitions == null ? [] : _detectModeOn ? _recognitions : [];
   }
 }

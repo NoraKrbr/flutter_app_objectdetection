@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:testapp/bluetooth/vibrotac/vibrotac.dart';
+import 'package:testapp/app_state.dart';
 
 class Bluetooth extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class Bluetooth extends StatefulWidget {
 class _BluetoothState extends State<Bluetooth> {
   // Initializing a global key, as it would help us in showing a SnackBar later
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final appState = AppState();
+
   // Get the instance of the bluetooth
   FlutterBluetoothSerial bluetooth = FlutterBluetoothSerial.instance;
 
@@ -48,6 +51,7 @@ class _BluetoothState extends State<Bluetooth> {
             _connected = true;
             _pressed = false;
           });
+          appState.setBluetoothConnected(true);
 
           break;
 
@@ -56,6 +60,8 @@ class _BluetoothState extends State<Bluetooth> {
             _connected = false;
             _pressed = false;
           });
+          appState.setBluetoothConnected(false);
+
           break;
 
         default:
@@ -249,6 +255,9 @@ class _BluetoothState extends State<Bluetooth> {
   void _connect() {
     if (_device == null) {
       show('No device selected');
+      appState.setTest("Test App State");
+      print(appState.test);
+      print('METHOD CONNECT');
     } else {
       bluetooth.isConnected.then((isConnected) {
         if (!isConnected) {
