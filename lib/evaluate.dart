@@ -35,20 +35,25 @@ class Evaluate extends StatelessWidget {
     final externalStorageDirectory = await getExternalStorageDirectory();
     final directory = Directory('${externalStorageDirectory.path}/test');
 
-    final outerMap = <String, dynamic>{};
+    final stopwatch = Stopwatch()..start();
 
-    directory
+    final results = await directory
         .list()
         .map((entity) => entity.path)
         .asyncMap((path) async =>
             await Tflite.detectObjectOnImage(path: path, asynch: false))
         .map((recognitions) => toListOfMaps(recognitions))
         .map((recognitions) => buildImageRecognition(recognitions))
-        .listen((recognitions) async {
-      print(recognitions);
-    }, onDone: () {
-      print('onDone');
+        .fold<List<Map<String, dynamic>>>(<Map<String, dynamic>>[],
+            (previous, element) {
+      previous.add(element);
+      return previous;
     });
+
+    final elapsedTime = stopwatch.elapsedMilliseconds;
+    print('Images got processed in $elapsedTime ms.');
+
+    print(results);
   }
 
   Map<String, dynamic> buildImageRecognition(List<Map> recognitions) {
