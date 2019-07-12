@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:testapp/bluetooth/bluetooth.dart';
 import 'package:testapp/camera_stream.dart';
+import 'package:testapp/evaluate.dart';
 import 'package:testapp/lndw/recognition_heuristic.dart';
 import 'package:testapp/settings.dart';
 
@@ -44,8 +45,7 @@ class _HomeState extends State<Home> {
   int _resolution = 2;
   double _framerate = 1.0;
 
-  setBluetooth(
-      device, recognitionThreshold, landscapeCutOff) {
+  setBluetooth(device, recognitionThreshold, landscapeCutOff) {
     setState(() {
       _device = device;
       _recognitionThreshold = recognitionThreshold;
@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
                   widget = Bluetooth(setBluetooth);
                   break;
                 case Menu.evaluate:
-                  // TODO: Handle this case.
+                  widget = Evaluate();
                   break;
               }
 

@@ -33,6 +33,7 @@
 version
 
 assets/images/
+assets/test/
 
 # packages file containing multi-root paths
 .packages.generated
