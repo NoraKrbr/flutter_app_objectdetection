@@ -53,7 +53,11 @@ class Evaluate extends StatelessWidget {
     final elapsedTime = stopwatch.elapsedMilliseconds;
     print('Images got processed in $elapsedTime ms.');
 
-    print(results);
+    final json = jsonEncode(results);
+    print(json);
+
+    final path = externalStorageDirectory.path;
+    await File('$path/results.json').writeAsString(json);
   }
 
   Map<String, dynamic> buildImageRecognition(List<Map> recognitions) {
