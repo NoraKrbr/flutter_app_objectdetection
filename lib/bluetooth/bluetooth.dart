@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:testapp/bluetooth/vibrotac/vibrotac.dart';
 
-typedef void Callback(bool bluetoothConnected, FlutterBluetoothSerial device, double recognitionThreshold, double landscapeCutOff);
+typedef void Callback(FlutterBluetoothSerial device, double recognitionThreshold, double landscapeCutOff);
 
 class Bluetooth extends StatefulWidget {
   final Callback setBluetooth;
@@ -71,7 +71,7 @@ class _BluetoothState extends State<Bluetooth> {
             _connected = false;
             _pressed = false;
           });
-          widget.setBluetooth(_connected, null, _recognitionThresholdSliderValue, _landscapeCutOff);
+          widget.setBluetooth(null, _recognitionThresholdSliderValue, _landscapeCutOff);
           break;
 
         default:
@@ -183,7 +183,7 @@ class _BluetoothState extends State<Bluetooth> {
                       max: 1.0,
                       onChanged: (newRating) {
                         setState(() => _recognitionThresholdSliderValue = newRating);
-                        widget.setBluetooth(_connected, bluetooth, _recognitionThresholdSliderValue, _landscapeCutOff);
+                        widget.setBluetooth(bluetooth, _recognitionThresholdSliderValue, _landscapeCutOff);
                       },
                       value: _recognitionThresholdSliderValue,
                     ),
@@ -209,7 +209,7 @@ class _BluetoothState extends State<Bluetooth> {
                       max: 0.5,
                       onChanged: (newRating) {
                         setState(() => _landscapeCutOff = newRating);
-                        widget.setBluetooth(_connected, bluetooth, _recognitionThresholdSliderValue, _landscapeCutOff);
+                        widget.setBluetooth(bluetooth, _recognitionThresholdSliderValue, _landscapeCutOff);
                       },
                       value: _landscapeCutOff,
                     ),
@@ -329,7 +329,7 @@ class _BluetoothState extends State<Bluetooth> {
             setState(() => _pressed = false);
           });
           setState(() => _pressed = true);
-          widget.setBluetooth(true, bluetooth, _recognitionThresholdSliderValue, _landscapeCutOff);
+          widget.setBluetooth(bluetooth, _recognitionThresholdSliderValue, _landscapeCutOff);
         }
       });
     }
@@ -339,7 +339,7 @@ class _BluetoothState extends State<Bluetooth> {
   void _disconnect() {
     bluetooth.disconnect();
     setState(() => _pressed = true);
-    widget.setBluetooth(false, null, _recognitionThresholdSliderValue, _landscapeCutOff);
+    widget.setBluetooth(null, _recognitionThresholdSliderValue, _landscapeCutOff);
   }
 
   void _sendLeftRequest() {

@@ -36,7 +36,6 @@ class _HomeState extends State<Home> {
   }
 
   // Bluetooth State
-  bool _bluetoothConnected = false;
   FlutterBluetoothSerial _device;
   double _recognitionThreshold;
   double _landscapeCutOff;
@@ -46,9 +45,8 @@ class _HomeState extends State<Home> {
   double _framerate = 1.0;
 
   setBluetooth(
-      bluetoothConnected, device, recognitionThreshold, landscapeCutOff) {
+      device, recognitionThreshold, landscapeCutOff) {
     setState(() {
-      _bluetoothConnected = bluetoothConnected;
       _device = device;
       _recognitionThreshold = recognitionThreshold;
       _landscapeCutOff = landscapeCutOff;
