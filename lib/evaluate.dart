@@ -40,11 +40,18 @@ class Evaluate extends StatelessWidget {
     final results = await directory
         .list()
         .map((entity) => entity.path)
-        .asyncMap((path) async =>
-            await Tflite.detectObjectOnImage(path: path, asynch: false))
-        .map((recognitions) => toListOfMaps(recognitions))
-        .map((recognitions) => buildImageRecognition(recognitions))
-        .fold<List<Map<String, dynamic>>>(<Map<String, dynamic>>[],
+        .asyncMap((path) async => Pair(
+            await Tflite.detectObjectOnImage(path: path, asynch: false), path))
+        .map((recognitionsToPath) {
+      final recognitions = recognitionsToPath.first;
+      final path = recognitionsToPath.second;
+      final listOfMaps = toListOfMaps(recognitions);
+      return Pair(listOfMaps, path);
+    }).map((recognitionsToPath) {
+      final recognitions = recognitionsToPath.first;
+      final path = recognitionsToPath.second;
+      return buildImageRecognition(recognitions, path);
+    }).fold<List<Map<String, dynamic>>>(<Map<String, dynamic>>[],
             (previous, element) {
       previous.add(element);
       return previous;
@@ -60,7 +67,10 @@ class Evaluate extends StatelessWidget {
     await File('$path/results.json').writeAsString(json);
   }
 
-  Map<String, dynamic> buildImageRecognition(List<Map> recognitions) {
+  Map<String, dynamic> buildImageRecognition(
+    List<Map> recognitions,
+    String path,
+  ) {
     final predictions = recognitions.map((recognition) {
       final boundingBox = recognition['rect'] as Map<dynamic, dynamic>;
       final confidence = recognition['confidenceInClass'];
@@ -74,7 +84,7 @@ class Evaluate extends StatelessWidget {
     }).toList();
 
     return <String, dynamic>{
-      'id': 'path',
+      'id': path,
       'preds': predictions,
     };
   }
@@ -84,12 +94,11 @@ class Evaluate extends StatelessWidget {
         .map((recognition) => recognition as Map<dynamic, dynamic>)
         .toList();
   }
+}
 
-  Future<Map<String, dynamic>> foo(String path) async {
-    final recognitions =
-        await Tflite.detectObjectOnImage(path: path, asynch: false);
-    print(recognitions);
+class Pair<T, S> {
+  final T first;
+  final S second;
 
-    return <String, dynamic>{};
-  }
+  Pair(this.first, this.second);
 }
