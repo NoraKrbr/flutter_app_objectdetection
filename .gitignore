@@ -32,6 +32,8 @@
 /packages/flutter/coverage/
 version
 
+assets/images/
+
 # packages file containing multi-root paths
 .packages.generated
 

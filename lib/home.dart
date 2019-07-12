@@ -6,6 +6,8 @@ import 'package:testapp/camera_stream.dart';
 import 'package:testapp/lndw/recognition_heuristic.dart';
 import 'package:testapp/settings.dart';
 
+enum Menu { settings, bluetooth, evaluate }
+
 class Home extends StatefulWidget {
   final List<CameraDescription> cameras;
 
@@ -16,7 +18,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   List<dynamic> _recognitions;
   bool _detectModeOn = false;
   bool _screenOn = false;
@@ -29,7 +30,9 @@ class _HomeState extends State<Home> {
       // _imageHeight = imageHeight;
       // _imageWidth = imageWidth;
     });
-    if (_device != null) RecognitionHeuristic().sendRequestBasedOnRecognitions(_recognitions, _device, _recognitionThreshold, _landscapeCutOff);
+    if (_device != null)
+      RecognitionHeuristic().sendRequestBasedOnRecognitions(
+          _recognitions, _device, _recognitionThreshold, _landscapeCutOff);
   }
 
   // Bluetooth State
@@ -39,10 +42,11 @@ class _HomeState extends State<Home> {
   double _landscapeCutOff;
 
   // Settings
-  int _resolution = 0;
+  int _resolution = 2;
   double _framerate = 1.0;
 
-  setBluetooth(bluetoothConnected, device, recognitionThreshold, landscapeCutOff){
+  setBluetooth(
+      bluetoothConnected, device, recognitionThreshold, landscapeCutOff) {
     setState(() {
       _bluetoothConnected = bluetoothConnected;
       _device = device;
@@ -51,7 +55,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  setSettings(resolution, framerate){
+  setSettings(resolution, framerate) {
     setState(() {
       _resolution = resolution;
       _framerate = framerate;
@@ -61,32 +65,64 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Object Detection'), actions: <Widget>[
-        Switch(
-          inactiveThumbColor: Colors.red,
-          activeColor: Colors.red,
-          value: _detectModeOn,
-          onChanged: (value) => setState(() => _detectModeOn = value)
-        ),
-        Switch(
-          value: _screenOn,
-          onChanged: (value) => setState(() => _screenOn = value)
-        ),
-        IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Settings(setSettings, _resolution, _framerate)));
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.bluetooth),
-          color: _bluetoothConnected ? Colors.blue : Colors.white,
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Bluetooth(setBluetooth)));
-          },
-        ),
-      ]),
-      body: CameraStream(widget.cameras, _resolution, _framerate, setRecognitions, _detectModeOn, _screenOn, _appBarHeight),
+      appBar: AppBar(
+        title: Text('Object Detection'),
+        actions: <Widget>[
+          Switch(
+              inactiveThumbColor: Colors.red,
+              activeColor: Colors.red,
+              value: _detectModeOn,
+              onChanged: (value) => setState(() => _detectModeOn = value)),
+          Switch(
+              value: _screenOn,
+              onChanged: (value) => setState(() => _screenOn = value)),
+          PopupMenuButton<Menu>(
+            onSelected: (Menu result) {
+              Widget widget;
+
+              switch (result) {
+                case Menu.settings:
+                  widget = Settings(setSettings, _resolution, _framerate);
+                  break;
+                case Menu.bluetooth:
+                  widget = Bluetooth(setBluetooth);
+                  break;
+                case Menu.evaluate:
+                  // TODO: Handle this case.
+                  break;
+              }
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => widget),
+              );
+            },
+            itemBuilder: (context) => <PopupMenuEntry<Menu>>[
+                  PopupMenuItem(
+                    value: Menu.settings,
+                    child: Text('Settings'),
+                  ),
+                  PopupMenuItem(
+                    value: Menu.bluetooth,
+                    child: Text('Bluetooth'),
+                  ),
+                  PopupMenuItem(
+                    value: Menu.evaluate,
+                    child: Text('Evaluate'),
+                  ),
+                ],
+          )
+        ],
+      ),
+      body: CameraStream(
+        widget.cameras,
+        _resolution,
+        _framerate,
+        setRecognitions,
+        _detectModeOn,
+        _screenOn,
+        _appBarHeight,
+      ),
     );
   }
 }
