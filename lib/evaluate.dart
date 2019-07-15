@@ -7,7 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tflite/tflite.dart';
 
-class Evaluate extends StatelessWidget {
+class Evaluate extends StatefulWidget {
+  @override
+  _EvaluateState createState() => _EvaluateState();
+}
+
+class _EvaluateState extends State<Evaluate> {
+  var _time = 0.0;
+  var _finishedEval = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,21 +25,35 @@ class Evaluate extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.all(32.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.only(bottom: 30.0),
               child: RaisedButton(
-                onPressed: () async => evaluate(),
+                onPressed: () async => _evaluate(),
                 child: Text('Start Evaluation'),
               ),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: _showText(),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Future<void> evaluate() async {
+  Widget _showText() {
+    if(_finishedEval) {
+      return Text('Evaluation took $_time seconds.');
+    }
+    else {
+      return Text('');
+    }
+  }
+
+  Future<void> _evaluate() async {
     final externalStorageDirectory = await getExternalStorageDirectory();
     final directory = Directory('${externalStorageDirectory.path}/test');
 
@@ -45,12 +67,12 @@ class Evaluate extends StatelessWidget {
         .map((recognitionsToPath) {
       final recognitions = recognitionsToPath.first;
       final path = recognitionsToPath.second;
-      final listOfMaps = toListOfMaps(recognitions);
+      final listOfMaps = _toListOfMaps(recognitions);
       return Pair(listOfMaps, path);
     }).map((recognitionsToPath) {
       final recognitions = recognitionsToPath.first;
       final path = recognitionsToPath.second;
-      return buildImageRecognition(recognitions, path);
+      return _buildImageRecognition(recognitions, path);
     }).fold<List<Map<String, dynamic>>>(<Map<String, dynamic>>[],
             (previous, element) {
       previous.add(element);
@@ -59,6 +81,10 @@ class Evaluate extends StatelessWidget {
 
     final elapsedTime = stopwatch.elapsedMilliseconds;
     print('Images got processed in $elapsedTime ms.');
+    setState(() {
+      _time = elapsedTime / 1000.0;
+      _finishedEval = true;
+    });
 
     final json = jsonEncode(results);
     print(json);
@@ -67,7 +93,7 @@ class Evaluate extends StatelessWidget {
     await File('$path/results.json').writeAsString(json);
   }
 
-  Map<String, dynamic> buildImageRecognition(
+  Map<String, dynamic> _buildImageRecognition(
     List<Map> recognitions,
     String path,
   ) {
@@ -89,7 +115,7 @@ class Evaluate extends StatelessWidget {
     };
   }
 
-  List<Map> toListOfMaps(List recognitions) {
+  List<Map> _toListOfMaps(List recognitions) {
     return recognitions
         .map((recognition) => recognition as Map<dynamic, dynamic>)
         .toList();

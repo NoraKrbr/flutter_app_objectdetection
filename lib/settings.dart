@@ -54,7 +54,7 @@ class _SettingsState extends State<Settings> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      "Resolution",
+                      'Resolution',
                       style: TextStyle(fontSize: 20),
                     ),
                   ],
