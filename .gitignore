@@ -34,6 +34,7 @@ version
 
 assets/images/
 assets/test/
+assets/val2017/
 
 # packages file containing multi-root paths
 .packages.generated

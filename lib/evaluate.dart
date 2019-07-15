@@ -45,38 +45,43 @@ class _EvaluateState extends State<Evaluate> {
   }
 
   Widget _showText() {
-    if(_finishedEval) {
+    if (_finishedEval) {
       return Text('Evaluation took $_time seconds.');
-    }
-    else {
+    } else {
       return Text('');
     }
   }
 
   Future<void> _evaluate() async {
     final externalStorageDirectory = await getExternalStorageDirectory();
-    final directory = Directory('${externalStorageDirectory.path}/test');
+    final directory = Directory('${externalStorageDirectory.path}/val2017');
+    print('starting evaluation on val2017');
 
     final stopwatch = Stopwatch()..start();
 
     final results = await directory
-        .list()
-        .map((entity) => entity.path)
+        .list() // returns Stream<FileSystemEntity>
+        .map((entity) => entity.path) // returns only image path to each entity
         .asyncMap((path) async => Pair(
-            await Tflite.detectObjectOnImage(path: path, asynch: false), path))
+            // Pair creates a tuple to pass down the path for saving, asyncMap waits for Future to complete
+            await Tflite.detectObjectOnImage(path: path, asynch: false),
+            path)) // detectObjectOnImage returns Future with recognitions
         .map((recognitionsToPath) {
       final recognitions = recognitionsToPath.first;
       final path = recognitionsToPath.second;
-      final listOfMaps = _toListOfMaps(recognitions);
+      final listOfMaps = _toListOfMaps(
+          recognitions); // convert List<dynamic> from detectObjectOnImage to a List<Map<dynamic, dynamic>>
       return Pair(listOfMaps, path);
     }).map((recognitionsToPath) {
       final recognitions = recognitionsToPath.first;
       final path = recognitionsToPath.second;
-      return _buildImageRecognition(recognitions, path);
+      return _buildImageRecognition(recognitions,
+          path); // build the map for each recognition that will be converted to json
     }).fold<List<Map<String, dynamic>>>(<Map<String, dynamic>>[],
             (previous, element) {
       previous.add(element);
       return previous;
+      // fold all maps into one for json conversion
     });
 
     final elapsedTime = stopwatch.elapsedMilliseconds;
@@ -87,16 +92,14 @@ class _EvaluateState extends State<Evaluate> {
     });
 
     final json = jsonEncode(results);
-    print(json);
+//    print(json);
 
     final path = externalStorageDirectory.path;
     await File('$path/results.json').writeAsString(json);
   }
 
   Map<String, dynamic> _buildImageRecognition(
-    List<Map> recognitions,
-    String path,
-  ) {
+      List<Map> recognitions, String path) {
     final predictions = recognitions.map((recognition) {
       final boundingBox = recognition['rect'] as Map<dynamic, dynamic>;
       final confidence = recognition['confidenceInClass'];
