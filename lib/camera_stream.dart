@@ -14,10 +14,9 @@ class CameraStream extends StatefulWidget {
   final double framerate;
   final Callback setRecognitions;
   final bool detectModeOn;
-  final bool screenOn;
   final double appBarHeight;
 
-  CameraStream(this.cameras, this.resolution, this.framerate, this.setRecognitions, this.detectModeOn, this.screenOn, this.appBarHeight);
+  CameraStream(this.cameras, this.resolution, this.framerate, this.setRecognitions, this.detectModeOn, this.appBarHeight);
 
   @override
   _CameraStreamState createState() => _CameraStreamState();
@@ -28,7 +27,6 @@ class _CameraStreamState extends State<CameraStream> {
   int _imageHeight = 0;
   int _imageWidth = 0;
   bool _detectModeOn = false;
-  bool _screenOn = false;
   int _resolution;
   int _framerate;
 
@@ -63,15 +61,15 @@ class _CameraStreamState extends State<CameraStream> {
     return Scaffold(
       body: Stack(
         children: [
-          Camera(widget.cameras, setRecognitions, _detectModeOn, _screenOn, _resolution, _framerate),
-          _screenOn ? BoundingBox(
+          Camera(widget.cameras, setRecognitions, _detectModeOn, _resolution, _framerate),
+          BoundingBox(
               getRecognitions(),
               math.max(_imageHeight, _imageWidth),
               math.min(_imageHeight, _imageWidth),
               screen.height,
               screen.width,
               widget.appBarHeight
-            ) : Container(),
+            ),
         ],
       ),
     );
@@ -88,7 +86,6 @@ class _CameraStreamState extends State<CameraStream> {
       _resolution = widget.resolution;
       _framerate = widget.framerate.floor();
       _detectModeOn = widget.detectModeOn;
-      _screenOn = widget.screenOn;
     });
     super.didUpdateWidget(oldWidget);
   }

@@ -21,7 +21,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<dynamic> _recognitions;
   bool _detectModeOn = false;
-  bool _screenOn = false;
 
   double _appBarHeight = AppBar().preferredSize.height;
 
@@ -67,13 +66,8 @@ class _HomeState extends State<Home> {
         title: Text('Object Detection'),
         actions: <Widget>[
           Switch(
-              inactiveThumbColor: Colors.red,
-              activeColor: Colors.red,
               value: _detectModeOn,
               onChanged: (value) => setState(() => _detectModeOn = value)),
-          Switch(
-              value: _screenOn,
-              onChanged: (value) => setState(() => _screenOn = value)),
           PopupMenuButton<Menu>(
             onSelected: (Menu result) {
               Widget widget;
@@ -118,7 +112,6 @@ class _HomeState extends State<Home> {
         _framerate,
         setRecognitions,
         _detectModeOn,
-        _screenOn,
         _appBarHeight,
       ),
     );
