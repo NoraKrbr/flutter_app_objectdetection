@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:testapp/bluetooth/bluetooth.dart';
 import 'package:testapp/camera_stream.dart';
-import 'package:testapp/evaluate.dart';
+import 'package:testapp/annotation.dart';
 import 'package:testapp/lndw/recognition_heuristic.dart';
 import 'package:testapp/settings.dart';
 
@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
                   widget = Bluetooth(setBluetooth);
                   break;
                 case Menu.evaluate:
-                  widget = Evaluate();
+                  widget = Annotation();
                   break;
               }
 

@@ -7,20 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tflite/tflite.dart';
 
-class Evaluate extends StatefulWidget {
+class Annotation extends StatefulWidget {
   @override
-  _EvaluateState createState() => _EvaluateState();
+  _AnnotationState createState() => _AnnotationState();
 }
 
-class _EvaluateState extends State<Evaluate> {
+class _AnnotationState extends State<Annotation> {
   var _time = 0.0;
-  var _finishedEval = false;
+  var _finishedAnnotation = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Evaluate'),
+        title: Text('Annotation'),
       ),
       body: Container(
         padding: EdgeInsets.all(32.0),
@@ -30,8 +30,8 @@ class _EvaluateState extends State<Evaluate> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
               child: RaisedButton(
-                onPressed: () async => _evaluate(),
-                child: Text('Start Evaluation'),
+                onPressed: () async => _annotate(),
+                child: Text('Start Annotation'),
               ),
             ),
             Padding(
@@ -45,16 +45,16 @@ class _EvaluateState extends State<Evaluate> {
   }
 
   Widget _showText() {
-    if (_finishedEval) {
-      return Text('Evaluation took $_time seconds.');
+    if (_finishedAnnotation) {
+      return Text('Evaluation took $_time seconds (${_time/60} minutes).');
     } else {
       return Text('');
     }
   }
 
-  Future<void> _evaluate() async {
+  Future<void> _annotate() async {
     final externalStorageDirectory = await getExternalStorageDirectory();
-    final directory = Directory('${externalStorageDirectory.path}/val2017');
+    final directory = Directory('${externalStorageDirectory.path}/test');
     print('starting evaluation on val2017');
 
     final stopwatch = Stopwatch()..start();
@@ -65,6 +65,7 @@ class _EvaluateState extends State<Evaluate> {
         .asyncMap((path) async => Pair(
             // Pair creates a tuple to pass down the path for saving, asyncMap waits for Future to complete
             await Tflite.detectObjectOnImage(path: path, asynch: false),
+            // set asynch to false to wait for completion
             path)) // detectObjectOnImage returns Future with recognitions
         .map((recognitionsToPath) {
       final recognitions = recognitionsToPath.first;
@@ -88,7 +89,7 @@ class _EvaluateState extends State<Evaluate> {
     print('Images got processed in $elapsedTime ms.');
     setState(() {
       _time = elapsedTime / 1000.0;
-      _finishedEval = true;
+      _finishedAnnotation = true;
     });
 
     final json = jsonEncode(results);
