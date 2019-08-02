@@ -4,14 +4,15 @@ const RES_LOW = 0;
 const RES_MED = 1;
 const RES_HIGH = 2;
 
-typedef void Callback(int resolution, double framerate);
+typedef void Callback(int resolution, double framerate, String settings);
 
 class Settings extends StatefulWidget {
   final Callback setSettings;
   final int resolution;
   final double framerate;
+  final String model;
 
-  Settings(this.setSettings, this.resolution, this.framerate);
+  Settings(this.setSettings, this.resolution, this.framerate, this.model);
 
   @override
   _SettingsState createState() => _SettingsState();
@@ -20,21 +21,19 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   int _resolution;
   double _framerate;
+  String _model;
 
   @override
   initState() {
     super.initState();
     _resolution = widget.resolution;
     _framerate = widget.framerate;
+    _model = widget.model;
   }
 
   Future<bool> _setSettings() {
-    widget.setSettings(_resolution, _framerate);
+    widget.setSettings(_resolution, _framerate, _model);
     return Future.value(true);
-  }
-
-  void handleResolutionChange(res) {
-    setState(() => _resolution = res);
   }
 
   Widget build(BuildContext context) {
@@ -49,6 +48,52 @@ class _SettingsState extends State<Settings> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      'Model',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Radio(
+                              onChanged: (model) => setState(() => _model = model),
+                              groupValue: _model,
+                              value: "SSDMobileNet",
+                            ),
+                            Text('SSD'),
+                            Radio(
+                              onChanged: (model) => setState(() => _model = model),
+                              groupValue: _model,
+                              value: "YOLO",
+                            ),
+                            Text('YOLO'),
+                            Radio(
+                              onChanged: (model) => setState(() => _model = model),
+                              groupValue: _model,
+                              value: "FasterRCNN",
+                            ),
+                            Text('Faster R-CNN'),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(
@@ -71,19 +116,19 @@ class _SettingsState extends State<Settings> {
                         Row(
                           children: <Widget>[
                             Radio(
-                              onChanged: (res) => handleResolutionChange(res),
+                              onChanged: (res) => setState(() => _resolution = res),
                               groupValue: _resolution,
                               value: RES_LOW,
                             ),
                             Text('Low'),
                             Radio(
-                              onChanged: (res) => handleResolutionChange(res),
+                              onChanged: (res) => setState(() => _resolution = res),
                               groupValue: _resolution,
                               value: RES_MED,
                             ),
                             Text('Medium'),
                             Radio(
-                              onChanged: (res) => handleResolutionChange(res),
+                              onChanged: (res) => setState(() => _resolution = res),
                               groupValue: _resolution,
                               value: RES_HIGH,
                             ),

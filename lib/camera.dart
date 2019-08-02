@@ -16,8 +16,9 @@ class Camera extends StatefulWidget {
   final bool detectModeOn;
   final int resolution;
   final int framerate;
+  final String model;
 
-  Camera(this.cameras, this.setRecognitions, this.detectModeOn, this.resolution, this.framerate);
+  Camera(this.cameras, this.setRecognitions, this.detectModeOn, this.resolution, this.framerate, this.model);
 
   @override
   _CameraState createState() => _CameraState();
@@ -30,6 +31,7 @@ class _CameraState extends State<Camera> {
   int lastTime = new DateTime.now().millisecondsSinceEpoch;
   ResolutionPreset _resolutionPreset;
   int _framerate;
+  String _model;
   int _rotation;
   int _lastRotation = 90;
 
@@ -37,6 +39,7 @@ class _CameraState extends State<Camera> {
   void initState() {
     _resolutionPreset = _getResolution(widget.resolution);
     _framerate = widget.framerate;
+    _model = widget.model;
 
     super.initState();
     if (widget.cameras == null || widget.cameras.length < 1) {
@@ -68,7 +71,7 @@ class _CameraState extends State<Camera> {
                   bytesList: img.planes.map((plane) {
                     return plane.bytes;
                   }).toList(),
-                  model: "SSDMobileNet",
+                  model: _model,
                   imageHeight: img.height,
                   imageWidth: img.width,
                   imageMean: 127.5,
@@ -158,6 +161,7 @@ class _CameraState extends State<Camera> {
     _detectModeOn = widget.detectModeOn;
     _resolutionPreset = _getResolution(widget.resolution);
     _framerate = widget.framerate;
+    _model = widget.model;
 
     //restart camera stream
     if (_rotation == 90 && _lastRotation != 90) {

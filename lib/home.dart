@@ -7,7 +7,7 @@ import 'package:testapp/annotation.dart';
 import 'package:testapp/lndw/recognition_heuristic.dart';
 import 'package:testapp/settings.dart';
 
-enum Menu { settings, bluetooth, evaluate }
+enum Menu { settings, bluetooth, annotate }
 
 class Home extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -40,9 +40,10 @@ class _HomeState extends State<Home> {
   double _recognitionThreshold;
   double _landscapeCutOff;
 
-  // Settings
+  // Settings and default values
   int _resolution = 2;
   double _framerate = 1.0;
+  String _model = 'SSDMobileNet';
 
   setBluetooth(device, recognitionThreshold, landscapeCutOff) {
     setState(() {
@@ -52,10 +53,11 @@ class _HomeState extends State<Home> {
     });
   }
 
-  setSettings(resolution, framerate) {
+  setSettings(resolution, framerate, model) {
     setState(() {
       _resolution = resolution;
       _framerate = framerate;
+      _model = model;
     });
   }
 
@@ -74,12 +76,12 @@ class _HomeState extends State<Home> {
 
               switch (result) {
                 case Menu.settings:
-                  widget = Settings(setSettings, _resolution, _framerate);
+                  widget = Settings(setSettings, _resolution, _framerate, _model);
                   break;
                 case Menu.bluetooth:
                   widget = Bluetooth(setBluetooth);
                   break;
-                case Menu.evaluate:
+                case Menu.annotate:
                   widget = Annotation();
                   break;
               }
@@ -99,8 +101,8 @@ class _HomeState extends State<Home> {
                     child: Text('Bluetooth'),
                   ),
                   PopupMenuItem(
-                    value: Menu.evaluate,
-                    child: Text('Evaluate'),
+                    value: Menu.annotate,
+                    child: Text('Annotate'),
                   ),
                 ],
           )
@@ -110,6 +112,7 @@ class _HomeState extends State<Home> {
         widget.cameras,
         _resolution,
         _framerate,
+        _model,
         setRecognitions,
         _detectModeOn,
         _appBarHeight,
