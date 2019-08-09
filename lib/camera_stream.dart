@@ -40,10 +40,10 @@ class _CameraStreamState extends State<CameraStream> {
     super.initState();
   }
 
-  loadModel() async {
+  loadModel(_model) async {
     String res = await Tflite.loadModel(
-        model: "assets/ssd_mobilenet.tflite",
-        labels: "assets/ssd_mobilenet.txt");
+        model: "assets/$_model.tflite",
+        labels: "assets/$_model.txt");
     print(res);
   }
 
@@ -60,11 +60,11 @@ class _CameraStreamState extends State<CameraStream> {
   @override
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
-    loadModel();
+    loadModel(_model);
     return Scaffold(
       body: Stack(
         children: [
-          Camera(widget.cameras, setRecognitions, _detectModeOn, _resolution, _framerate, _model),
+          Camera(widget.cameras, setRecognitions, _detectModeOn, _resolution, _framerate, "SSDMobileNet"),
           BoundingBox(
               getRecognitions(),
               math.max(_imageHeight, _imageWidth),

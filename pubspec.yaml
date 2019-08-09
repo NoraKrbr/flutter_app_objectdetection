@@ -53,6 +53,8 @@ flutter:
   assets:
      - assets/ssd_mobilenet.tflite
      - assets/ssd_mobilenet.txt
+     - assets/ssd_mobilenet_quantized_75.tflite
+     - assets/ssd_mobilenet_quantized_75.txt
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

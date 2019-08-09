@@ -67,26 +67,31 @@ class _SettingsState extends State<Settings> {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Radio(
-                              onChanged: (model) => setState(() => _model = model),
-                              groupValue: _model,
-                              value: "SSDMobileNet",
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_mobilenet",
+                                ),
+                                Text('SSD MobileNet'),
+                              ],
                             ),
-                            Text('SSD'),
-                            Radio(
-                              onChanged: (model) => setState(() => _model = model),
-                              groupValue: _model,
-                              value: "YOLO",
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_mobilenet_quantized_75",
+                                ),
+                                Text('SSD MobileNet, Quantized, Depth: 0.75'),
+                              ],
                             ),
-                            Text('YOLO'),
-                            Radio(
-                              onChanged: (model) => setState(() => _model = model),
-                              groupValue: _model,
-                              value: "FasterRCNN",
-                            ),
-                            Text('Faster R-CNN'),
                           ],
                         )
                       ],
@@ -116,19 +121,22 @@ class _SettingsState extends State<Settings> {
                         Row(
                           children: <Widget>[
                             Radio(
-                              onChanged: (res) => setState(() => _resolution = res),
+                              onChanged: (res) =>
+                                  setState(() => _resolution = res),
                               groupValue: _resolution,
                               value: RES_LOW,
                             ),
                             Text('Low'),
                             Radio(
-                              onChanged: (res) => setState(() => _resolution = res),
+                              onChanged: (res) =>
+                                  setState(() => _resolution = res),
                               groupValue: _resolution,
                               value: RES_MED,
                             ),
                             Text('Medium'),
                             Radio(
-                              onChanged: (res) => setState(() => _resolution = res),
+                              onChanged: (res) =>
+                                  setState(() => _resolution = res),
                               groupValue: _resolution,
                               value: RES_HIGH,
                             ),

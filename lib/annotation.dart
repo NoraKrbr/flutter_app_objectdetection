@@ -54,7 +54,7 @@ class _AnnotationState extends State<Annotation> {
 
   Future<void> _annotate() async {
     final externalStorageDirectory = await getExternalStorageDirectory();
-    final directory = Directory('${externalStorageDirectory.path}/test');
+    final directory = Directory('${externalStorageDirectory.path}/images');
     print('starting evaluation on val2017');
 
     final stopwatch = Stopwatch()..start();
