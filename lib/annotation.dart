@@ -13,8 +13,10 @@ class Annotation extends StatefulWidget {
 }
 
 class _AnnotationState extends State<Annotation> {
-  var _time = 0.0;
+  var _annotationTime = 0.0;
+  var _detectionTime = 0.0;
   var _finishedAnnotation = false;
+  var _finishedDetection = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +32,24 @@ class _AnnotationState extends State<Annotation> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
               child: RaisedButton(
-                onPressed: () async => _annotate(),
+                onPressed: () async => _annotateValData(),
                 child: Text('Start Annotation'),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: _showText(),
+              child: _showText('Annotation', _annotationTime),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30.0),
+              child: RaisedButton(
+                onPressed: () async => _detectValData(),
+                child: Text('Start Detection'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: _showText('Detection', _detectionTime),
             ),
           ],
         ),
@@ -44,18 +57,39 @@ class _AnnotationState extends State<Annotation> {
     );
   }
 
-  Widget _showText() {
-    if (_finishedAnnotation) {
-      return Text('Evaluation took $_time seconds (${_time/60} minutes).');
-    } else {
+  Widget _showText(String task, double time) {
+    if ((task == 'Detection' && !_finishedDetection) ||
+        (task == 'Annotation' && !_finishedAnnotation)) {
       return Text('');
     }
+    return Text('$task took $time seconds (${time / 60} minutes).');
   }
 
-  Future<void> _annotate() async {
+  Future<void> _detectValData() async {
     final externalStorageDirectory = await getExternalStorageDirectory();
-    final directory = Directory('${externalStorageDirectory.path}/images');
-    print('starting evaluation on val2017');
+    final directory = Directory('${externalStorageDirectory.path}/val2017');
+    print('starting detection on COCO val2017 set');
+    final stopwatch = Stopwatch()..start();
+
+    directory
+        .list()
+        .map((entity) => entity.path)
+        .asyncMap((path) async =>
+            await Tflite.detectObjectOnImage(path: path, asynch: false))
+        .listen((_) {}, onDone: () {
+      final elapsedTime = stopwatch.elapsedMilliseconds;
+      print('Object detection on all images took $elapsedTime ms.');
+      setState(() {
+        _detectionTime = elapsedTime / 1000.0;
+        _finishedDetection = true;
+      });
+    });
+  }
+
+  Future<void> _annotateValData() async {
+    final externalStorageDirectory = await getExternalStorageDirectory();
+    final directory = Directory('${externalStorageDirectory.path}/val2017');
+    print('starting annotation on COCO val2017 set');
 
     final stopwatch = Stopwatch()..start();
 
@@ -86,14 +120,13 @@ class _AnnotationState extends State<Annotation> {
     });
 
     final elapsedTime = stopwatch.elapsedMilliseconds;
-    print('Images got processed in $elapsedTime ms.');
+    print('Annotation of images took $elapsedTime ms.');
     setState(() {
-      _time = elapsedTime / 1000.0;
+      _annotationTime = elapsedTime / 1000.0;
       _finishedAnnotation = true;
     });
 
     final json = jsonEncode(results);
-//    print(json);
 
     final path = externalStorageDirectory.path;
     await File('$path/results.json').writeAsString(json);
@@ -107,15 +140,15 @@ class _AnnotationState extends State<Annotation> {
       final clazz = recognition['detectedClass'];
 
       return <String, dynamic>{
-        'boundingBox': boundingBox,
-        'confidence': confidence,
-        'class': clazz
+        'BoundingBox': boundingBox,
+        'Confidence': confidence,
+        'Class': clazz
       };
     }).toList();
 
     return <String, dynamic>{
-      'id': path,
-      'preds': predictions,
+      'ID': path,
+      'Predictions': predictions,
     };
   }
 

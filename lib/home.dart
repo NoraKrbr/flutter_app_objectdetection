@@ -71,12 +71,13 @@ class _HomeState extends State<Home> {
               value: _detectModeOn,
               onChanged: (value) => setState(() => _detectModeOn = value)),
           PopupMenuButton<Menu>(
-            onSelected: (Menu result) {
+            onSelected: (Menu chosen) {
               Widget widget;
 
-              switch (result) {
+              switch (chosen) {
                 case Menu.settings:
-                  widget = Settings(setSettings, _resolution, _framerate, _model);
+                  widget =
+                      Settings(setSettings, _resolution, _framerate, _model);
                   break;
                 case Menu.bluetooth:
                   widget = Bluetooth(setBluetooth);

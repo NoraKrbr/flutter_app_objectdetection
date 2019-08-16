@@ -169,9 +169,9 @@ class _SettingsState extends State<Settings> {
                       child: Slider(
                         activeColor: Colors.white,
                         min: 1,
-                        max: 25,
-                        onChanged: (newRating) =>
-                            setState(() => _framerate = newRating),
+                        max: 60,
+                        onChanged: (value) =>
+                            setState(() => _framerate = value),
                         value: _framerate,
                       ),
                     ),
