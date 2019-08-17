@@ -87,9 +87,97 @@ class _SettingsState extends State<Settings> {
                                   onChanged: (model) =>
                                       setState(() => _model = model),
                                   groupValue: _model,
+                                  value: "ssd_mobilenet_ptq",
+                                ),
+                                Text('SSD MobileNet, PTQ'),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_mobilenet_75",
+                                ),
+                                Text('SSD MobileNet, Depth: 0.75'),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_mobilenet_75_ptq",
+                                ),
+                                Text('SSD MobileNet, Depth: 0.75, PTQ'),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_mobilenet_quantized",
+                                ),
+                                Text('SSD MobileNet, Quantized'),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_mobilenet_quantized_ptq",
+                                ),
+                                Text('SSD MobileNet, Quantized, PTQ'),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
                                   value: "ssd_mobilenet_quantized_75",
                                 ),
                                 Text('SSD MobileNet, Quantized, Depth: 0.75'),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_mobilenet_quantized_75_ptq",
+                                ),
+                                Text('SSD MobileNet, Quantized, Depth: 0.75, PTQ'),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_inception",
+                                ),
+                                Text('SSD Inception'),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Radio(
+                                  onChanged: (model) =>
+                                      setState(() => _model = model),
+                                  groupValue: _model,
+                                  value: "ssd_inception_ptq",
+                                ),
+                                Text('SSD Inception, PTQ'),
                               ],
                             ),
                           ],

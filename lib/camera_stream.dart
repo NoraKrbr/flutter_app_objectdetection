@@ -41,10 +41,9 @@ class _CameraStreamState extends State<CameraStream> {
   }
 
   loadModel(_model) async {
-    String res = await Tflite.loadModel(
+    await Tflite.loadModel(
         model: "assets/$_model.tflite",
         labels: "assets/$_model.txt");
-    print(res);
   }
 
   setRecognitions(recognitions, imageHeight, imageWidth) {

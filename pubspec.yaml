@@ -51,10 +51,27 @@ flutter:
   #  - images/a_dot_ham.jpeg
 
   assets:
-     - assets/ssd_mobilenet.tflite
-     - assets/ssd_mobilenet.txt
-     - assets/ssd_mobilenet_quantized_75.tflite
-     - assets/ssd_mobilenet_quantized_75.txt
+    - assets/ssd_mobilenet.tflite
+    - assets/ssd_mobilenet_ptq.tflite
+    - assets/ssd_mobilenet_75.tflite
+    - assets/ssd_mobilenet_75_ptq.tflite
+    - assets/ssd_mobilenet_quantized.tflite
+    - assets/ssd_mobilenet_quantized_ptq.tflite
+    - assets/ssd_mobilenet_quantized_75.tflite
+    - assets/ssd_mobilenet_quantized_75_ptq.tflite
+    - assets/ssd_inception.tflite
+    - assets/ssd_inception_ptq.tflite
+
+    - assets/ssd_mobilenet.txt
+    - assets/ssd_mobilenet_ptq.txt
+    - assets/ssd_mobilenet_75.txt
+    - assets/ssd_mobilenet_75_ptq.txt
+    - assets/ssd_mobilenet_quantized.txt
+    - assets/ssd_mobilenet_quantized_ptq.txt
+    - assets/ssd_mobilenet_quantized_75.txt
+    - assets/ssd_mobilenet_quantized_75_ptq.txt
+    - assets/ssd_inception.txt
+    - assets/ssd_inception_ptq.txt
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
