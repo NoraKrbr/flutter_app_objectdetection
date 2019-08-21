@@ -62,16 +62,7 @@ flutter:
     - assets/ssd_inception.tflite
     - assets/ssd_inception_ptq.tflite
 
-    - assets/ssd_mobilenet.txt
-    - assets/ssd_mobilenet_ptq.txt
-    - assets/ssd_mobilenet_75.txt
-    - assets/ssd_mobilenet_75_ptq.txt
-    - assets/ssd_mobilenet_quantized.txt
-    - assets/ssd_mobilenet_quantized_ptq.txt
-    - assets/ssd_mobilenet_quantized_75.txt
-    - assets/ssd_mobilenet_quantized_75_ptq.txt
-    - assets/ssd_inception.txt
-    - assets/ssd_inception_ptq.txt
+    - assets/coco_20_labels.txt
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -43,7 +43,7 @@ class _CameraStreamState extends State<CameraStream> {
   loadModel(_model) async {
     await Tflite.loadModel(
         model: "assets/$_model.tflite",
-        labels: "assets/$_model.txt");
+        labels: "assets/coco_20_labels.txt");
   }
 
   setRecognitions(recognitions, imageHeight, imageWidth) {

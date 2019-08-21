@@ -13,8 +13,8 @@ class Annotation extends StatefulWidget {
 }
 
 class _AnnotationState extends State<Annotation> {
-  var _annotationTime = 0.0;
-  var _detectionTime = 0.0;
+  var _annotationTime = 0;
+  var _detectionTime = 0;
   var _finishedAnnotation = false;
   var _finishedDetection = false;
 
@@ -32,7 +32,7 @@ class _AnnotationState extends State<Annotation> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
               child: RaisedButton(
-                onPressed: () async => _annotateValData(),
+                onPressed: () async => _annotateValidationData(),
                 child: Text('Start Annotation'),
               ),
             ),
@@ -43,7 +43,7 @@ class _AnnotationState extends State<Annotation> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
               child: RaisedButton(
-                onPressed: () async => _detectValData(),
+                onPressed: () async => _detectValidationImages(),
                 child: Text('Start Detection'),
               ),
             ),
@@ -57,15 +57,15 @@ class _AnnotationState extends State<Annotation> {
     );
   }
 
-  Widget _showText(String task, double time) {
+  Widget _showText(String task, int time) {
     if ((task == 'Detection' && !_finishedDetection) ||
         (task == 'Annotation' && !_finishedAnnotation)) {
       return Text('');
     }
-    return Text('$task took $time seconds (${time / 60} minutes).');
+    return Text('$task took $time ms.');
   }
 
-  Future<void> _detectValData() async {
+  Future<void> _detectValidationImages() async {
     final externalStorageDirectory = await getExternalStorageDirectory();
     final directory = Directory('${externalStorageDirectory.path}/val2017');
     print('starting detection on COCO val2017 set');
@@ -80,13 +80,16 @@ class _AnnotationState extends State<Annotation> {
       final elapsedTime = stopwatch.elapsedMilliseconds;
       print('Object detection on all images took $elapsedTime ms.');
       setState(() {
-        _detectionTime = elapsedTime / 1000.0;
+        _detectionTime = elapsedTime;
         _finishedDetection = true;
       });
     });
+
+    final path = externalStorageDirectory.path;
+    await File('$path/results.json').writeAsString('test');
   }
 
-  Future<void> _annotateValData() async {
+  Future<void> _annotateValidationData() async {
     final externalStorageDirectory = await getExternalStorageDirectory();
     final directory = Directory('${externalStorageDirectory.path}/val2017');
     print('starting annotation on COCO val2017 set');
@@ -122,7 +125,7 @@ class _AnnotationState extends State<Annotation> {
     final elapsedTime = stopwatch.elapsedMilliseconds;
     print('Annotation of images took $elapsedTime ms.');
     setState(() {
-      _annotationTime = elapsedTime / 1000.0;
+      _annotationTime = elapsedTime;
       _finishedAnnotation = true;
     });
 
