@@ -1,13 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:testapp/bluetooth/bluetooth.dart';
 import 'package:testapp/camera_stream.dart';
-import 'package:testapp/annotation.dart';
-import 'package:testapp/lndw/recognition_heuristic.dart';
+import 'package:testapp/evaluation.dart';
 import 'package:testapp/settings.dart';
 
-enum Menu { settings, bluetooth, annotate }
+enum Menu { settings, evaluate }
 
 class Home extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -24,34 +21,10 @@ class _HomeState extends State<Home> {
 
   double _appBarHeight = AppBar().preferredSize.height;
 
-  setRecognitions(recognitions, imageHeight, imageWidth) {
-    setState(() {
-      _recognitions = recognitions;
-      // _imageHeight = imageHeight;
-      // _imageWidth = imageWidth;
-    });
-    if (_device != null)
-      RecognitionHeuristic().sendRequestBasedOnRecognitions(
-          _recognitions, _device, _recognitionThreshold, _landscapeCutOff);
-  }
-
-  // Bluetooth State
-  FlutterBluetoothSerial _device;
-  double _recognitionThreshold;
-  double _landscapeCutOff;
-
   // Settings and default values
   int _resolution = 2;
   double _framerate = 1.0;
   String _model = 'ssd_mobilenet';
-
-  setBluetooth(device, recognitionThreshold, landscapeCutOff) {
-    setState(() {
-      _device = device;
-      _recognitionThreshold = recognitionThreshold;
-      _landscapeCutOff = landscapeCutOff;
-    });
-  }
 
   setSettings(resolution, framerate, model) {
     setState(() {
@@ -79,11 +52,8 @@ class _HomeState extends State<Home> {
                   widget =
                       Settings(setSettings, _resolution, _framerate, _model);
                   break;
-                case Menu.bluetooth:
-                  widget = Bluetooth(setBluetooth);
-                  break;
-                case Menu.annotate:
-                  widget = Annotation();
+                case Menu.evaluate:
+                  widget = Evaluation();
                   break;
               }
 
@@ -98,12 +68,8 @@ class _HomeState extends State<Home> {
                     child: Text('Settings'),
                   ),
                   PopupMenuItem(
-                    value: Menu.bluetooth,
-                    child: Text('Bluetooth'),
-                  ),
-                  PopupMenuItem(
-                    value: Menu.annotate,
-                    child: Text('Annotate'),
+                    value: Menu.evaluate,
+                    child: Text('Evaluate'),
                   ),
                 ],
           )
@@ -114,7 +80,6 @@ class _HomeState extends State<Home> {
         _resolution,
         _framerate,
         _model,
-        setRecognitions,
         _detectModeOn,
         _appBarHeight,
       ),

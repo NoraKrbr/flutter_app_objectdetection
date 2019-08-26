@@ -8,7 +8,6 @@ import 'package:testapp/home.dart';
 List<CameraDescription> cameras;
 
 Future<Null> main() async {
-
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {
@@ -26,8 +25,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     Screen.keepOn(true);
     return MaterialApp(
-      theme: ThemeData.dark(),
-      home: Home(cameras: cameras),
+        theme: ThemeData.dark(),
+        home: Home(cameras: cameras),
+        debugShowCheckedModeBanner: false
     );
   }
 }

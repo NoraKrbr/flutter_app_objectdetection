@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tflite/tflite.dart';
 
-class Annotation extends StatefulWidget {
+class Evaluation extends StatefulWidget {
   @override
-  _AnnotationState createState() => _AnnotationState();
+  _EvaluationState createState() => _EvaluationState();
 }
 
-class _AnnotationState extends State<Annotation> {
+class _EvaluationState extends State<Evaluation> {
   var _annotationTime = 0;
   var _detectionTime = 0;
   var _finishedAnnotation = false;
