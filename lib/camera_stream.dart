@@ -22,6 +22,9 @@ class CameraStream extends StatefulWidget {
   _CameraStreamState createState() => _CameraStreamState();
 }
 
+/* The Scaffold widget in the build method is from
+* https://github.com/shaqian/flutter_realtime_detection/blob/master/lib/home.dart*/
+
 class _CameraStreamState extends State<CameraStream> {
   List<dynamic> _recognitions;
   int _imageHeight = 0;

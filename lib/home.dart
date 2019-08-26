@@ -16,12 +16,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<dynamic> _recognitions;
   bool _detectModeOn = false;
-
   double _appBarHeight = AppBar().preferredSize.height;
 
-  // Settings and default values
+  // Settings default values
   int _resolution = 2;
   double _framerate = 1.0;
   String _model = 'ssd_mobilenet';

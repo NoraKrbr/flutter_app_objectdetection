@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+/* all code in this widget is from 
+* https://github.com/shaqian/flutter_realtime_detection/blob/master/lib/bndbox.dart */
+
 class BoundingBox extends StatelessWidget {
   final List<dynamic> results;
   final int previewH;

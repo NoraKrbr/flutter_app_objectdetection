@@ -7,6 +7,8 @@ import 'package:testapp/home.dart';
 
 List<CameraDescription> cameras;
 
+/* main function is from
+* https://github.com/shaqian/flutter_realtime_detection/blob/master/lib/main.dart */
 Future<Null> main() async {
   try {
     cameras = await availableCameras();
@@ -27,7 +29,6 @@ class App extends StatelessWidget {
     return MaterialApp(
         theme: ThemeData.dark(),
         home: Home(cameras: cameras),
-        debugShowCheckedModeBanner: false
-    );
+        debugShowCheckedModeBanner: false);
   }
 }

@@ -22,7 +22,7 @@ class _EvaluationState extends State<Evaluation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Annotation'),
+        title: Text('Evaluation'),
       ),
       body: Container(
         padding: EdgeInsets.all(32.0),
