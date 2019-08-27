@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
   // Settings default values
   int _resolution = 2;
   double _framerate = 1.0;
-  String _model = 'ssd_mobilenet';
+  String _model = 'ssd_mobilenet_quantized_75_ptq';
 
   setSettings(resolution, framerate, model) {
     setState(() {

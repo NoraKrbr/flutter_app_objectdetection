@@ -48,6 +48,14 @@ class _CameraStreamState extends State<CameraStream> {
         labels: "assets/coco_20_labels.txt");
   }
 
+  setRecognitions(recognitions, imageHeight, imageWidth) {
+    setState(() {
+      _recognitions = recognitions;
+      _imageHeight = imageHeight;
+      _imageWidth = imageWidth;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
@@ -55,7 +63,7 @@ class _CameraStreamState extends State<CameraStream> {
     return Scaffold(
       body: Stack(
         children: [
-          Camera(widget.cameras, _detectModeOn, _resolution, _framerate, "SSDMobileNet"),
+          Camera(widget.cameras, setRecognitions, _detectModeOn, _resolution, _framerate, "SSDMobileNet"),
           BoundingBox(
               getRecognitions(),
               math.max(_imageHeight, _imageWidth),

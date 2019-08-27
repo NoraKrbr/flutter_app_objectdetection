@@ -15,12 +15,13 @@ typedef void Callback(List<dynamic> list, int h, int w);
 
 class Camera extends StatefulWidget {
   final List<CameraDescription> cameras;
+  final Callback setRecognitions;
   final bool detectModeOn;
   final int resolution;
   final int framerate;
   final String model;
 
-  Camera(this.cameras, this.detectModeOn, this.resolution, this.framerate,
+  Camera(this.cameras, this.setRecognitions, this.detectModeOn, this.resolution, this.framerate,
       this.model);
 
   @override
@@ -84,6 +85,8 @@ class _CameraState extends State<Camera> {
 
                   int endTime = new DateTime.now().millisecondsSinceEpoch;
                   print("Detection took ${endTime - startTime}");
+
+                  widget.setRecognitions(recognitions, img.height, img.width);
 
                   isDetecting = false;
                 });
